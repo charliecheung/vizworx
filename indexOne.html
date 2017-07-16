@@ -1,0 +1,117 @@
+<!--
+Charlie Cheung
+VizworX Code Challegne Part One
+July 14th, 2017
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>VizworX Coding Challenge One</title>
+    <link rel="stylesheet" href="styles.css"> <!--import css stylesheet-->
+	<script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+</head>
+<body>
+<script>
+		var data = [];
+
+d3.csv("city of calgary census 2016.csv", function(d) {
+	return {
+		NAME : d.NAME, // community name
+		RES_CNT : +d.RES_CNT // force value of resident count to be a number
+	};
+}, function(error, rows) { // catch error if error, read rows
+	data = rows; // set data equal to rows
+	console.log(data);
+	createVisualization(); // call function to create chart
+});
+
+function createVisualization(){
+	// Width and height of SVG
+	var w = 800;
+	var h = 400;
+    var barPadding = 5; 
+
+	// Get length of dataset
+	var arrayLength = data.length; // length of data
+	var maxValue = d3.max(data, function(d) { return +d.RES_CNT;} ); // get max
+	var x_axisLength = 800;
+	var y_axisLength = 700; 
+
+	//get height of the visualization
+	var yScale = d3.scaleLinear()
+	    .domain([0, maxValue])
+	    .range([0, y_axisLength / 2]);
+
+	//create SVG
+	var svg = d3.select("body")
+		.append("svg")
+		.attr("width", w)
+		.attr("height", h);
+
+	//create bars for data
+	svg.selectAll( "rect" )
+		.data( data )
+		.enter()
+		.append("rect")
+        .filter(function(d){ return d.NAME == 'EDGEMONT' || d.NAME == 'ACADIA' || d.NAME == 'BANFF TRAIL' || d.NAME == 'CRESCENT HEIGHTS' || d.NAME == 'PANORAMA HILLS';}) //filters to specific communities
+		.attr( "x", function(d,i){
+			return i * 25 + 45; 
+		})
+		.attr( "y", function(d){
+			return h - yScale(d.RES_CNT);
+		})
+		.attr( "width", ((x_axisLength * 9)/arrayLength) - 2) 
+		.attr( "height", function(d){
+			return yScale(d.RES_CNT); // Set height of using the scale
+		})
+		.attr( "fill", "steelblue")
+    //show label and res_cnt on hover
+        .on("mouseover", function(d){ 
+            return tooltip.style("visibility", "visible").text(d.NAME + ": " + d.RES_CNT);
+	   })
+	   .on("mousemove", function(d){
+		  return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px").text(d.NAME + ": " + d.RES_CNT);
+        })
+	   .on("mouseout", function(d){
+            return tooltip.style("visibility", "hidden");
+	   });
+    
+	//create y-axis
+	svg.append("line")
+		.attr("x1", 25)
+		.attr("y1", 15)
+		.attr("x2", 30)
+		.attr("y2", 575)
+		.attr("stroke-width", 1)
+		.attr("stroke", "black");
+
+	//create x-axis
+	svg.append("line")
+		.attr("x1", 30)
+		.attr("y1", 400)
+		.attr("x2", 200)
+		.attr("y2", 400)
+		.attr("stroke-width", 2)
+		.attr("stroke", "black");
+
+	//y-axis label
+	svg.append("text")
+		.attr("class", "y label")
+		.attr("text-anchor", "end")
+		.text("Resident count")
+		.attr("transform", "translate(20, 20) rotate(-90)")
+		.attr("font-size", "14")
+		.attr("font-family", "'Open Sans', sans-serif");
+    
+    	// Create Tooltip and set it to be hidden	
+    var tooltip = d3.select("body")
+        .append("div")
+	   .style("position", "absolute")
+        .style("font-family", "'Open Sans', sans-serif")
+	   .style("font-size", "12px")
+        .style("z-index", "10")
+	   .style("visibility", "hidden");
+}; // end of function
+	</script>
+</body>
+</html>

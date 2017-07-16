@@ -1,0 +1,205 @@
+<!--
+Charlie Cheung
+July 16th, 2017
+VizworX Code Challenge Part Two
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>VizworX Code Challenge Two</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--import d3-->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <!--import css stylesheet-->
+    <link rel="stylesheet" href="style.css"> 
+    <!--import fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+    <!--import jquery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container"> 
+    <!--carousel bootstrap-->
+  <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+    </ol>   
+      
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+      <div class="item active">
+          <div id="svg">  
+              <!--legend-->
+              <ul class="legend">
+    <li><span class="one"></span> NORTH: 152011</li>
+    <li><span class="two"></span> SOUTH: 22491</li>
+    <li><span class="four"></span> EAST: 59042</li>
+    <li><span class="three"></span> WEST: 123960</li>
+    <li><span class="eight"></span> NORTHWEST: 177492</li>
+    <li><span class="six"></span> NORTHEAST: 176112</li>
+    <li><span class="five"></span> SOUTHEAST: 127793</li>
+    <li><span class="eleven"></span> SOUTHWEST: 0</li>
+    <li><span class="one"></span> CENTRE: 193729</li>
+</ul>
+          </div>
+        <script>
+      //set width, height, and radius
+    var width = 950,
+      height = 450,
+      radius = Math.min(width, height) / 2;
+
+      //set colors
+    var color = d3.scale.ordinal()
+       .range(["#FBB4C4", "#8F99C9", "#FBFAFA", "#A16EA8", "#FBC79E", "#8251A4", "#EBA2D0", "#FBD8B5", "#A4A1C9", "#8ECCD4", "#A18B89"]);
+
+    var arc = d3.svg.arc()
+      .outerRadius(radius - 10)
+      .innerRadius(radius - 100);
+
+    var pie = d3.layout.pie()
+      .sort(null)
+      .value(function(d) {
+        return d.values;
+      });
+
+    var div = d3.select("#svg").append("div")    
+        .style("opacity", 0);
+            
+    var svg = d3.select("#svg").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    d3.csv("city of calgary census 2016.csv", function(error, data) {
+      var data = d3.nest()
+        .key(function(d) {
+          return d.SECTOR; //get sector
+        })
+      //sum RES_CNT for sector
+        .rollup(function(d) {
+          return d3.sum(d, function(g) {
+            return g.RES_CNT;
+          });
+        }).entries(data);
+        
+      var g = svg.selectAll(".arc")
+        .data(pie(data))
+        .enter().append("g")
+        .attr("class", "arc");
+        
+        //fill colors
+      g.append("path")
+        .attr("d", arc)
+        .style("fill", function(d) {
+          return color(d.data.key);
+        });
+
+        //labels
+      g.append("text")
+        .attr("transform", function(d) {
+          return "translate(" + arc.centroid(d) + ")";
+        })
+        .attr("dy", "0.85em")
+        .attr("font-family", "'PT Sans', sans-serif")
+        .attr("font-size", "16px")
+        .style("text-anchor", "middle")
+        .style("fill", "#2b2b2b")
+        .text(function(d) {
+          return d.data.key;
+        });
+    });
+  </script>
+      </div>
+
+        <!--slide two-->
+      <div class="item"> 
+          <!--legend-->
+<ul class="legend">
+    <li><span class="ten"></span> EMPLOYMENT: 1994</li>
+    <li><span class="two"></span> OTHER: 1859</li>
+    <li><span class="eleven"></span> PARKS: 0</li>
+    <li><span class="four"></span> UNDERDEVELOPED: 583</li>
+    <li><span class="nine"></span> 2000s: 205626</li>
+    <li><span class="three"></span> BUILDING OUT: 220755</li>
+    <li><span class="four"></span> 1960S/1970S: 27125</li>
+    <li><span class="five"></span> 1980S/1990S: 237134</li>
+    <li><span class="six"></span> 1950S: 163870</li>
+    <li><span class="one"></span> INNER CITY: 91904</li>
+    <li><span class="eight"></span> CENTRE CITY: 40072</li>
+</ul>
+ <div id="svgTwo"></div>
+       <script>
+
+    var div = d3.select("#svgTwo").append("div")    
+        .style("opacity", 0);
+           
+    var svgTwo = d3.select("#svgTwo").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    d3.csv("city of calgary census 2016.csv", function(error, data) {
+      var data = d3.nest()
+        .key(function(d) {
+          return d.COMM_STRUCTURE; //get comm_structure
+        })
+      //sum RES_CNT for comm_structure
+       .rollup(function(d) {
+          return d3.sum(d, function(g) {
+            return g.RES_CNT;
+          });
+        }).entries(data);
+        
+      var g = svgTwo.selectAll(".arc")
+        .data(pie(data))
+        .enter().append("g")
+        .attr("class", "arc");
+
+        //fill colors
+      g.append("path")
+        .attr("d", arc)
+        .style("fill", function(d) {
+          return color(d.data.key);
+        });
+
+        //labels
+      g.append("text")
+        .attr("transform", function(d) {
+          return "translate(" + arc.centroid(d) + ")";
+        })
+        .attr("dy", "0.85em")
+        .style("text-anchor", "middle")
+         .attr("font-family", "'PT Sans', sans-serif")
+        .attr("font-size", "11px")
+        .style("text-anchor", "middle")
+        .style("fill", "#2b2b2b")
+        .text(function(d) {
+          return d.data.key;
+        });
+    });
+  </script>
+      </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

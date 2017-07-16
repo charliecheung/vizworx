@@ -1,0 +1,86 @@
+/**
+Charlie Cheung
+July 16th, 2017
+CSS Stylesheet for vizworx code challenge
+**/
+html, body {
+    height: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat:no-repeat;
+    background: -webkit-linear-gradient( to left top, #92A8D1, #F7CAC9);
+    background: -moz-linear-gradient( to left top, #92A8D1, #F7CAC9);
+    background: -ms-linear-gradient( to left top, #92A8D1, #F7CAC9);
+    background: -o-linear-gradient( to left top, #92A8D1, #F7CAC9);
+    background: linear-gradient( to left top, #92A8D1, #F7CAC9);
+    } 
+::-webkit-scrollbar {
+    width: 9px;
+    height: 3px;
+    background: #fcfcfa;
+}
+::-webkit-scrollbar-thumb {
+    background-color:#d7d6d7;
+    -webkit-border-radius: 1ex;
+}
+.carousel {
+        background: white;
+        top: 30px;
+        overflow: hidden;
+        font-size: 12px;
+        position: relative;
+        height: auto;
+        padding: 10px;    
+    }
+ h1 {
+	font-family: 'Raleway', sans-serif;
+	font-size: 18px;
+	letter-spacing: 2px;
+	font-weight: bold;
+	text-align: center;
+	color: white !important;
+   }
+.carousel-control.left{
+    background-image: none;
+    background: linear-gradient( to bottom, white , #F7CAC9);
+}
+.carousel-control.right {
+    background-image: none; 
+    background: linear-gradient( to bottom, white , #92A8D1);
+}
+.carousel-indicators li {
+    box-shadow: 2px 2px grey;   
+}
+text {
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+}
+.legend { 
+    list-style: none; 
+}
+.legend li { 
+    float: left; 
+    margin-right: 10px; 
+}
+.legend span { 
+    border: 1px solid #ccc; 
+    float: left; 
+    width: 12px; 
+    height: 12px; 
+    margin: 2px;
+    font-size:11px;
+}
+/* colors */
+.legend .one { background-color: #FBB4C4; }
+.legend .two { background-color: #8F99C9; }
+.legend .three { background-color: #FBFAFA; }
+.legend .four { background-color: #A16EA8; }
+.legend .five { background-color: #FBC79E; }
+.legend .six { background-color: #8251A4; }
+.legend .seven { background-color: #EBA2D0; }
+.legend .eight { background-color: #FBD8B5; }
+.legend .nine { background-color: #A4A1C9; }
+.legend .ten { background-color: #8ECCD4; }
+.legend .eleven { background-color: #A18B89; }
